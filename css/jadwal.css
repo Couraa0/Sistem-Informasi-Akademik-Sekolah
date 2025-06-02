@@ -1,0 +1,142 @@
+body {
+    background-color: #f5f5f5; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.content-wrapper {
+    margin-left: 0px;
+    padding: 20px;
+    background-color: #fff;
+}
+    
+.navbar {
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+        
+.navbar-brand {
+    font-weight: bold;
+    color: #333;
+}
+        
+.search-bar {
+    margin: 20px 0;
+    position: relative;
+}
+        
+.search-bar input {
+    border-radius: 20px;
+    padding-right: 40px;
+    border: 1px solid #ddd;
+}
+        
+.search-bar .btn {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    background-color: #ffc107;
+    color: #fcfcfc;
+}
+        
+.subject-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 28px;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.1);
+    padding: 28px 32px 28px 32px;
+    position: relative;
+    max-width: 1100px;
+    min-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+}
+
+
+.subject-card > div:not(.schedule-info) {
+    flex: 1 1 0;
+}
+        
+.subject-name {
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+        
+.subject-code {
+    display: inline-block;
+    background-color: #1a73e8;
+    color: white;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 15px;
+    margin-right: 8px;
+    margin-bottom: 6px;
+}
+        
+.subject-type {
+    display: inline-block;
+    background-color: #f1f1f1;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+        
+.teacher-info {
+    margin: 18px 0 0 0;
+}
+        
+.teacher-name {
+    background-color: #1a73e8;
+    color: white;
+    display: inline-block;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 15px;
+    margin-top: 6px;
+    margin-left: 5px;
+}
+        
+.schedule-info {
+    position: static;
+    text-align: right;
+    min-width: 220px;
+    margin-left: 32px;
+}
+        
+.room-info {
+    margin-top: 10px;
+    text-align: right;
+}
+
+@media (max-width: 900px) {
+    .subject-card {
+        flex-direction: column;
+        padding: 18px 8px;
+        max-width: 100%;
+    }
+    .schedule-info {
+        text-align: left;
+        margin-left: 0;
+        margin-top: 18px;
+        min-width: unset;
+    }
+    .room-info {
+        text-align: left;
+    }
+}
+        
+.breadcrumb-section {
+    padding: 10px 0;
+}
+        
+.breadcrumb {
+    margin-bottom: 0;
+}

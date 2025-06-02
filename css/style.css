@@ -1,0 +1,281 @@
+:root {
+    --primary-color: #4285F4;
+    --secondary-color: #FFD100;
+    --success-color: #34A853;
+    --danger-color: #EA4335;
+    --light-color: #F8F9FA;
+    --dark-color: #343A40;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F5F5F5;
+}
+
+/* Login Page */
+.login-page {
+    background-color: var(--primary-color);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+    font-size: 32px;
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-button {
+    background-color: var(--secondary-color);
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.login-google {
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: white;
+    height: 100vh;
+    position: fixed;
+    width: 250px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-icon {
+    color: var(--primary-color);
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.sidebar-link {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    color: var(--dark-color);
+    text-decoration: none;
+    border-left: 4px solid transparent;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    background-color: #f8f9fa;
+    border-left: 4px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.header-bar {
+    background-color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 80px; 
+}
+
+.breadcrumb {
+    margin-bottom: 0;
+    font-size: 14px; 
+}
+
+.header-bar .dropdown {
+    margin-left: auto;
+}
+
+.dropdown-menu {
+    z-index: 1050; 
+}
+
+.content-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Dashboard */
+.dashboard-card {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-card .card-img-top {
+    height: 150px;
+    object-fit: cover;
+}
+
+/* Biodata */
+.biodata-tabs {
+    margin-bottom: 20px;
+}
+
+.biodata-tab {
+    background-color: #f8f9fa;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.biodata-tab.active {
+    background-color: var(--secondary-color);
+    color: var(--dark-color);
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.profile-info {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Jadwal */
+.schedule-card {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.teacher-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.teacher-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Rekap Nilai */
+.download-button {
+    background-color: var(--secondary-color);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.table-grades {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-grades th {
+    background-color: #f0f0f0;
+    padding: 12px;
+    text-align: left;
+}
+
+.table-grades td {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Chat Button */
+.chat-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.chat-button:hover {
+    background-color: var(--secondary-color);
+}
+
+.chat-icon {
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar-link span {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+    }
+    
+    .sidebar {
+        width: 0;
+        z-index: 1030;
+    }
+    
+    .sidebar.show {
+        width: 250px;
+    }
+}

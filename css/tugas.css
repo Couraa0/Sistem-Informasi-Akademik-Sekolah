@@ -1,0 +1,93 @@
+body{
+    background-color: #f5f5f5;
+}
+
+.sidebar-container {
+        margin-left: 310px;
+        margin-top: 40px;
+        position: fixed;
+        width: 250px;
+        height: 100%;
+        left: 0;
+        overflow-y: auto;
+        background-color: #fff;
+        border-right: 1px solid #eee;
+        z-index: 100;
+    }
+    
+    .main-content {
+        margin-left: 290px;
+        padding: 20px;
+        margin-top: 30px;
+        background-color: #fff;
+    }
+    
+    .subject-list {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .subject-list li {
+        padding: 15px;
+        border-bottom: 1px solid #b1b1b1;
+        border-radius: 5px;
+    }
+    
+    .subject-list li.active {
+        border-left: 4px solid #0d6efd;
+        background-color: #fbfbfb;
+    }
+    
+    .subject-list li a {
+        color: #333;
+        text-decoration: none;
+        display: block;
+        width: 100%;
+    }
+    
+    .subject-list li.active a {
+        color: #0d6efd;
+        font-weight: 500;
+    }
+    
+    .card-matematika {
+        background-color: #0d6efd;
+        color: white;
+        width: 820px;
+        height: 200px;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .task-card {
+        background-color: rgb(216, 235, 249);
+        border: px solid #ffffff;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        padding: 10px 15px;
+    }
+    
+    .task-icon {
+        background-color: #0d6efd;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+    
+    .breadcrumb-custom {
+        padding: 8px 0;
+        margin-bottom: 20px;
+        background-color: transparent;
+    }
+    
+    .toggle-switch {
+        width: 60px;
+        height: 30px;
+    }
+        
