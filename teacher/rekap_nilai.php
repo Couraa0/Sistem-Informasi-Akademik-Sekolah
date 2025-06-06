@@ -6,7 +6,7 @@ require_once '../config.php';
 
 function requireTeacherLogin() {
     if (!isLoggedIn() || $_SESSION['role'] !== 'teacher') {
-        header("Location: ../teacher_login.php");
+        header("Location: ../allert.php");
         exit;
     }
 }
@@ -196,6 +196,111 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 }
 
+// Export all students' grades to Excel
+if (isset($_GET['export']) && $_GET['export'] === 'excel_all') {
+    header("Content-Type: application/vnd.ms-excel");
+    header("Content-Disposition: attachment; filename=rekap_nilai_semua_siswa.xls");
+    echo "<table border='1'>";
+    echo "<tr>
+            <th>No</th>
+            <th>Nama Siswa</th>
+            <th>NIS</th>
+            <th>Kelas</th>
+            <th>Mata Pelajaran</th>
+            <th>Nilai Tugas</th>
+            <th>Nilai UTS</th>
+            <th>Nilai UAS</th>
+            <th>Nilai Akhir</th>
+            <th>Grade</th>
+            <th>Semester</th>
+            <th>Tahun Akademik</th>
+          </tr>";
+    $all_sql = "SELECT s.name as student_name, s.nis, c.level, c.name as class_name, c.specialization, 
+                       sub.name as subject_name, g.assignment_score, g.midterm_score, g.final_score, 
+                       g.total_score, g.letter_grade, g.semester, g.academic_year
+                FROM grades g
+                JOIN students s ON g.student_id = s.id
+                LEFT JOIN classes c ON s.class_id = c.id
+                LEFT JOIN subjects sub ON g.subject_id = sub.id
+                ORDER BY s.name, g.semester, sub.name";
+    $all_result = $conn->query($all_sql);
+    $no = 1;
+    while ($row = $all_result->fetch_assoc()) {
+        $kelas = htmlspecialchars($row['level'] . ' ' . $row['class_name'] . ' ' . $row['specialization']);
+        echo "<tr>
+                <td>{$no}</td>
+                <td>".htmlspecialchars($row['student_name'])."</td>
+                <td>".htmlspecialchars($row['nis'])."</td>
+                <td>{$kelas}</td>
+                <td>".htmlspecialchars($row['subject_name'])."</td>
+                <td>".number_format($row['assignment_score'], 1)."</td>
+                <td>".number_format($row['midterm_score'], 1)."</td>
+                <td>".number_format($row['final_score'], 1)."</td>
+                <td>".number_format($row['total_score'], 1)."</td>
+                <td>".htmlspecialchars($row['letter_grade'])."</td>
+                <td>".htmlspecialchars($row['semester'])."</td>
+                <td>".htmlspecialchars($row['academic_year'])."</td>
+              </tr>";
+        $no++;
+    }
+    echo "</table>";
+    exit;
+}
+
+// Export nilai per semester ke Excel
+if (isset($_GET['export']) && $_GET['export'] === 'excel_semester' && isset($_GET['semester_export'])) {
+    $semester_export = intval($_GET['semester_export']);
+    $semester_label = "Semester_" . $semester_export;
+    header("Content-Type: application/vnd.ms-excel");
+    header("Content-Disposition: attachment; filename=rekap_nilai_{$semester_label}.xls");
+    echo "<table border='1'>";
+    echo "<tr>
+            <th>No</th>
+            <th>Nama Siswa</th>
+            <th>NIS</th>
+            <th>Kelas</th>
+            <th>Mata Pelajaran</th>
+            <th>Nilai Tugas</th>
+            <th>Nilai UTS</th>
+            <th>Nilai UAS</th>
+            <th>Nilai Akhir</th>
+            <th>Grade</th>
+            <th>Semester</th>
+            <th>Tahun Akademik</th>
+          </tr>";
+    $sql = "SELECT s.name as student_name, s.nis, c.level, c.name as class_name, c.specialization, 
+                   sub.name as subject_name, g.assignment_score, g.midterm_score, g.final_score, 
+                   g.total_score, g.letter_grade, g.semester, g.academic_year
+            FROM grades g
+            JOIN students s ON g.student_id = s.id
+            LEFT JOIN classes c ON s.class_id = c.id
+            LEFT JOIN subjects sub ON g.subject_id = sub.id
+            WHERE g.semester = $semester_export
+            ORDER BY s.name, sub.name";
+    $result = $conn->query($sql);
+    $no = 1;
+    while ($row = $result->fetch_assoc()) {
+        $kelas = htmlspecialchars($row['level'] . ' ' . $row['class_name'] . ' ' . $row['specialization']);
+        echo "<tr>
+                <td>{$no}</td>
+                <td>".htmlspecialchars($row['student_name'])."</td>
+                <td>".htmlspecialchars($row['nis'])."</td>
+                <td>{$kelas}</td>
+                <td>".htmlspecialchars($row['subject_name'])."</td>
+                <td>".number_format($row['assignment_score'], 1)."</td>
+                <td>".number_format($row['midterm_score'], 1)."</td>
+                <td>".number_format($row['final_score'], 1)."</td>
+                <td>".number_format($row['total_score'], 1)."</td>
+                <td>".htmlspecialchars($row['letter_grade'])."</td>
+                <td>".htmlspecialchars($row['semester'])."</td>
+                <td>".htmlspecialchars($row['academic_year'])."</td>
+              </tr>";
+        $no++;
+    }
+    echo "</table>";
+    exit;
+}
+
 $subjects_sql = "SELECT * FROM subjects ORDER BY name ASC";
 $subjects_result = $conn->query($subjects_sql);
 
@@ -206,7 +311,6 @@ include 'includes/header.php';
     <div class="container-fluid">
         <div class="row mb-4">
             <div class="col-12 d-flex justify-content-between align-items-center">
-                <h1 class="page-title"><?php echo $page_title; ?></h1>
                 <?php if ($student_info): ?>
                 <a href="rekap_nilai.php" class="btn btn-outline-primary">
                     <i class="fas fa-arrow-left me-2"></i>Kembali
@@ -230,6 +334,28 @@ include 'includes/header.php';
         <?php endif; ?>
         
         <?php if (!$student_info): ?>
+        <div class="row mb-4">
+            <div class="col-12 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <h1 class="page-title mb-0"><?php echo $page_title; ?></h1>
+                <div>
+                    <!-- Dropdown download per semester -->
+                    <div class="btn-group mb-2">
+                        <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-file-excel me-1"></i>Download Rekap Nilai Per Semester
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="rekap_nilai.php?export=excel_semester&semester_export=1">Semester 1</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="rekap_nilai.php?export=excel_semester&semester_export=2">Semester 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card">
@@ -358,7 +484,7 @@ include 'includes/header.php';
                     </div>
                     <div class="card-body">
                         <div class="text-center mb-3">
-                            <img src="../img/rakha.jpg" class="rounded-circle" width="100" alt="Student Photo">
+                            <img src="../img/Profil.jpg" class="rounded-circle" width="100" alt="Student Photo">
                             <h4 class="mt-3 mb-0"><?php echo htmlspecialchars($student_info['name']); ?></h4>
                             <p class="text-muted"><?php echo htmlspecialchars($student_info['nis']); ?></p>
                         </div>
@@ -493,14 +619,6 @@ include 'includes/header.php';
                             <div>
                                 <strong>Rata-rata Nilai:</strong> 
                                 <span class="badge bg-primary px-3 py-2 ms-2"><?php echo number_format($avg_score, 2); ?></span>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-success me-2">
-                                    <i class="fas fa-file-excel me-1"></i>Export Excel
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger">
-                                    <i class="fas fa-file-pdf me-1"></i>Export PDF
-                                </button>
                             </div>
                         </div>
                     </div>

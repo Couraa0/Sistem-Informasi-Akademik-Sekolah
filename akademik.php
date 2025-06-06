@@ -8,17 +8,17 @@ requireLogin();
 $student_id = $_SESSION['user_id'];
 
 // Total Nilai dan Peringkat
-$total_sql = "SELECT AVG(total_score) as total_score FROM grades WHERE student_id = $student_id";
+$total_sql = "SELECT SUM(total_score) as total_score FROM grades WHERE student_id = $student_id";
 $total_result = $conn->query($total_sql);
 $total_nilai = $total_result->fetch_assoc()['total_score'] ?? 0;
-$total_nilai = number_format($total_nilai, 1);
+$total_nilai = number_format($total_nilai);
 
-// Ranking
-$rank_sql = "SELECT s.id, s.name, AVG(g.total_score) as avg_score 
+// Ranking berdasarkan total nilai terbanyak
+$rank_sql = "SELECT s.id, s.name, SUM(g.total_score) as total_score 
              FROM students s 
              JOIN grades g ON s.id = g.student_id 
              GROUP BY s.id 
-             ORDER BY avg_score DESC";
+             ORDER BY total_score DESC";
 $rank_result = $conn->query($rank_sql);
 
 $rank = 0;
@@ -57,8 +57,79 @@ $grades_sql = "SELECT g.*, s.code as subject_code, s.name as subject_name
                WHERE g.student_id = $student_id AND g.semester = $selected_semester";
 $grades_result = $conn->query($grades_sql);
 
+// Export nilai siswa per semester ke Excel
+if (isset($_GET['export']) && $_GET['export'] === 'excel_semester' && isset($_GET['semester_export'])) {
+    $semester_export = intval($_GET['semester_export']);
+    $semester_label = "Semester_" . $semester_export;
+    header("Content-Type: application/vnd.ms-excel");
+    header("Content-Disposition: attachment; filename=nilai_saya_{$semester_label}.xls");
+    echo "<table border='1'>";
+    echo "<tr>
+            <th>No</th>
+            <th>Kode Mapel</th>
+            <th>Nama Mapel</th>
+            <th>Nilai Angka</th>
+            <th>Nilai Huruf</th>
+          </tr>";
+    $sql = "SELECT s.code as subject_code, s.name as subject_name, g.total_score, g.letter_grade
+            FROM grades g
+            JOIN subjects s ON g.subject_id = s.id
+            WHERE g.student_id = $student_id AND g.semester = $semester_export";
+    $result = $conn->query($sql);
+    $no = 1;
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>{$no}</td>
+                <td>".htmlspecialchars($row['subject_code'])."</td>
+                <td>".htmlspecialchars($row['subject_name'])."</td>
+                <td>".number_format($row['total_score'], 2)."</td>
+                <td>".htmlspecialchars($row['letter_grade'])."</td>
+              </tr>";
+        $no++;
+    }
+    echo "</table>";
+    exit;
+}
+
 include 'includes/header.php';
 ?>
+
+<style>
+    @media (max-width: 991.98px) {
+    .akademik-content .content-card {
+        padding: 0 !important;
+    }
+    .akademik-content .table-responsive {
+        margin: 0 -12px;
+    }
+}
+.akademik-content .table-responsive {
+    overflow-x: auto;
+}
+.akademik-content table {
+    min-width: 1100px;
+    width: 100%;
+    background: #fff;
+}
+.akademik-content th, .akademik-content td {
+    vertical-align: middle !important;
+    white-space: nowrap;
+}
+@media (max-width: 767.98px) {
+    .akademik-content .content-card {
+        padding: 0 !important;
+    }
+    .akademik-content table {
+        font-size: 14px;
+        min-width: 600px;
+    }
+    .akademik-content .btn,
+    .akademik-content .btn-outline-primary {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+}
+</style>
 
 <div class="container-fluid px-4">
     <div class="row">
@@ -79,17 +150,30 @@ include 'includes/header.php';
                             </div>
                         </div>
                     </div>
-                    
                     <?php if (!empty($semesters)): ?>
                         <div class="mt-4">
-                            <div class="d-flex mb-3">
+                            <div class="d-flex mb-3 flex-wrap align-items-center">
                                 <?php foreach ($semesters as $semester): ?>
-                                    <a href="?semester=<?php echo $semester; ?>" class="btn <?php echo $semester == $selected_semester ? 'btn-primary' : 'btn-outline-primary'; ?> me-2">
+                                    <a href="?semester=<?php echo $semester; ?>" class="btn <?php echo $semester == $selected_semester ? 'btn-primary' : 'btn-outline-primary'; ?> me-2 mb-2">
                                         Semester <?php echo $semester; ?>
                                     </a>
                                 <?php endforeach; ?>
+                                <!-- Download Excel per semester -->
+                                <div class="btn-group ms-auto mb-2">
+                                    <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-file-excel me-1"></i>Download Nilai Excel
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <?php foreach ($semesters as $sem): ?>
+                                            <li>
+                                                <a class="dropdown-item" href="?export=excel_semester&semester_export=<?php echo $sem; ?>">
+                                                    Semester <?php echo $sem; ?>
+                                                </a>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
                             </div>
-                            
                             <div class="content-card">
                                 <div class="card-header bg-light">
                                     <h5 class="mb-0">Semester <?php echo $selected_semester; ?></h5>
