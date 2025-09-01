@@ -1,4 +1,4 @@
-# Project PBW-Kelompok6
+# Project Sistem Informasi Akademik Sekolah
 
 ## 📋 Deskripsi Project
 Project ini merupakan tugas mata kuliah Pengembangan Berbasis Web yang dikembangkan oleh Kelompok 6. Aplikasi ini adalah sebuah Sistem Informasi Akademik Sekolah yang dirancang untuk mempermudah pengelolaan data akademik secara digital dan terintegrasi.
